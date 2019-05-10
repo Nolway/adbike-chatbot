@@ -29,6 +29,4 @@ if (empty($response['messages'])) {
     ];
 }
 
-json_encode($response);
-
-return $response;
+echo json_encode($response);
