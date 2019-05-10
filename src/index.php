@@ -16,9 +16,9 @@ if (isset($_GET['action'])) {
 
     switch ($action) {
         case 'search-bike':
-            $response['messages'] = [
-                ["text"=> "COUCOU"],
-            ];
+            saveStats();
+            $messages = getBikesByParams();
+            $response['messages'] = $messages;
             break;
     }
 }
