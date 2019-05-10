@@ -15,16 +15,17 @@ if (isset($_GET['action'])) {
     $action = $_GET['action'];
 
     switch ($action) {
-        case 'searchBike':
-            addStats();
-            searchBike();
+        case 'search-bike':
+            $response['messages'] = [
+                ["text"=> "COUCOU"],
+            ];
             break;
     }
 }
 
 if (empty($response['messages'])) {
     $response['messages'] = [
-        ["text"=> "Oups ! Une erreur c'est produite !"],
+        ["text"=> "Oups ! Une erreur s'est produite !"],
         ["text"=> "Merci de réessayer plus tard ;)"],
     ];
 }
