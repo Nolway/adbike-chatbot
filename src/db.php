@@ -11,15 +11,22 @@ $db = new PDO(db_driver . ":dbname=" . db_name . ";host=" . db_host,
 
 function getBikesByParams() {
     if (empty($_POST)) {
-        return [];
+        return [
+            "message" => "Veuillez renseigner des critères de selection"
+        ];
     }
 
     global $db;
 
     $sqlWhere = [];
     foreach ($_POST as $key => $value) {
-        $sqlWhere[] = $key . '=:' . $key;
-        // $whereClauseData[$key] = $value;
+        if ($key == 'cylinder') {
+            $sqlWhere[] = "$key BETWEEN :$key -100  AND :$key +100";
+        } else if ($key == 'budget') {
+            $sqlWhere[] = "$key BETWEEN :$key -500  AND :$key +500";
+        } else {
+            $sqlWhere[] = $key . '=:' . $key;
+        }
     }
 
     $query = "SELECT * FROM bikes WHERE " . implode(" AND ", $sqlWhere);
@@ -27,23 +34,27 @@ function getBikesByParams() {
     $req->execute($_POST);
 
     $bikes = [];
-
     foreach($req->fetchAll() as $bike){
         $bikes[] = [
-            "title" => $bike['bike_name'],
+            "name" => $bike['bike_name'],
+            "budget" => $bike['budget'],
+            "brand" => $bike['brand'],
+            "two_wheels_type" => $bike['two_wheels_type'],
+            "cylinder" => $bike['cylinder'],
             "image_url" => $bike['image_link'],
         ];
     }
 
     if (count($bikes) < 1) {
         return [
-            "text" =>"Désolé mais nous n'avons trouvé aucun véhicule correspondant à vos critères ",
-            "post" => $_POST
+            "text" => "Désolé mais nous n'avons trouvé aucun véhicule correspondant à vos critères ",
+            "criteria" => $_POST
         ];
     }
 
     return [
-        ["text"=> "Voici les véhicules correspondant à vos critères ;) :"],
-        $params,
+        "message" => "Voici les véhicules correspondant à vos critères:",
+        "bikesNumber" => count($bikes),
+        "bikes" => $bikes,
     ];
 }

@@ -14,6 +14,8 @@ services:
             - POSTGRES_DB=adbike
             - POSTGRES_USER=adbike
             - POSTGRES_PASSWORD=adbike
+        volumes:
+            - './adBike.sql:/adBike.sql'
     php-fpm:
         build: docker/php
         volumes:

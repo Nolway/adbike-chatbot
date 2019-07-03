@@ -1,7 +1,5 @@
 <?php
 
-// require_once 'Bike.php';
-// require_once 'UserStats.php';
 require_once 'db.php';
 
 header("Access-Control-Allow-Origin: *");
@@ -16,7 +14,6 @@ if (isset($_GET['action'])) {
 
     switch ($action) {
         case 'search-bike':
-            // saveStats();
             $messages = getBikesByParams();
             $response['messages'] = $messages;
             break;
