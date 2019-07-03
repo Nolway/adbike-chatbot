@@ -16,14 +16,15 @@ function getBikesByParams() {
 
     global $db;
 
-    $query = "SELECT * FROM bikes;";
+    $sqlWhere = [];
+    foreach ($_POST as $key => $value) {
+        $sqlWhere[] = $key . '=:' . $key;
+        // $whereClauseData[$key] = $value;
+    }
 
-    $params = [
-
-    ];
-
+    $query = "SELECT * FROM bikes WHERE " . implode(" AND ", $sqlWhere);
     $req = $db->prepare($query);
-    $req->execute($params);
+    $req->execute($_POST);
 
     $bikes = [];
 
@@ -36,12 +37,13 @@ function getBikesByParams() {
 
     if (count($bikes) < 1) {
         return [
-            ["text"=> "Désolé mais nous n'avons trouvé aucun véhicule correspondant à vos critères =("],
+            "text" =>"Désolé mais nous n'avons trouvé aucun véhicule correspondant à vos critères ",
+            "post" => $_POST
         ];
     }
 
     return [
         ["text"=> "Voici les véhicules correspondant à vos critères ;) :"],
-        $bikes,
+        $params,
     ];
 }
