@@ -35,9 +35,6 @@ INSERT INTO bikes (bike_name, two_wheels_type, licence, cylinder, bike_type, rec
     VALUES ('R 1250 GS', 'bike', 'A', 1254, 'trail', 180, 'BMW', 17400, 'https://moto-station.com/wp-content/uploads/2018/09/17/BMW-R1250GS-2019-1.jpg');
 
 INSERT INTO bikes (bike_name, two_wheels_type, licence, cylinder, bike_type, recommended_height, brand, budget, image_link)
-    VALUES ('X ADV', 'bike', 'A2', 745, 'trail', 175, 'Honda', 11999, 'http://www.moto-net.com/sites/default/files/honda-x-adv-2018_s.jpg');
-
-INSERT INTO bikes (bike_name, two_wheels_type, licence, cylinder, bike_type, recommended_height, brand, budget, image_link)
     VALUES ('MT09', 'bike', 'A', 847, 'roadster', 175, 'Yamaha', 10000, 'https://patrickpons.com/nas/commun/annonces/e1118ae7cc7ad29269ac969cb749bc860aec5084/photo-annonce-mt-09_5a1c547bac8f3616373886.jpg');
 
 INSERT INTO bikes (bike_name, two_wheels_type, licence, cylinder, bike_type, recommended_height, brand, budget, image_link)
