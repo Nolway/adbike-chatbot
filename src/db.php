@@ -46,6 +46,19 @@ function getBikesByParams() {
         ];
     }
 
+    $messages = [];
+    foreach($bikes as $bike) {
+        // $messages[] = ["text" => $bike["name"]];
+        $messages[] = [
+            "attachment" => [
+                "type" => "image",
+                "payload" => [
+                    "url" => $bike["image_url"]
+                ]
+            ]
+        ];
+    }
+
     if (count($bikes) < 1) {
         return [
             "text" => "Désolé mais nous n'avons trouvé aucun véhicule correspondant à vos critères ",
@@ -53,9 +66,5 @@ function getBikesByParams() {
         ];
     }
 
-    return [
-        "message" => "Voici les véhicules correspondant à vos critères:",
-        "bikesNumber" => count($bikes),
-        "bikes" => $bikes
-    ];
+    return $messages;
 }
