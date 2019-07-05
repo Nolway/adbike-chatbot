@@ -50,6 +50,7 @@ function getBikesByParams() {
     foreach($bikes as $bike) {
         // $messages[] = ["text" => $bike["name"]];
         $messages[] = [
+            "text" => $bike["name"] . ': ' . $bike["budget"] . '€ \n Cylindrée: ' . $bike["cylinder"] . '\n Marque: ' . $bike["brand"],
             "attachment" => [
                 "type" => "image",
                 "payload" => [
