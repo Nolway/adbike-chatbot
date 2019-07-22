@@ -17,6 +17,14 @@ function getBikesByParams() {
     }
 
     $jsonQueryBody = get_object_vars(json_decode(file_get_contents('php://input')));
+    if ($jsonQueryBody['bike_type']) {
+        $jsonQueryBody['bike_type'] = strtolower($jsonQueryBody['bike_type']);
+    }
+
+    if ($jsonQueryBody['two_wheels_type'] == 'scooter' || $jsonQueryBody['two_wheels_type'] == 'Scooter') {
+        unset($jsonQueryBody['bike_type']);
+    }
+
     global $db;
 
     $sqlWhere = [];
@@ -24,7 +32,16 @@ function getBikesByParams() {
         if ($key == 'cylinder') {
             $sqlWhere[] = "$key BETWEEN :$key -100  AND :$key +100";
         } else if ($key == 'budget') {
-            $sqlWhere[] = "$key BETWEEN :$key -500  AND :$key +500";
+            $sqlWhere[] = "$key <= :$key + 500";
+        } else if ($key == 'two_wheels_type') {
+            if (preg_match('~\b(moto|Moto|bike|Bike)\b~i',$value)) {
+	        $jsonQueryBody['two_wheels_type'] =  'bike';
+	    } else if (preg_match('~\b(scooter|Scooter)\b~i',$value)) {
+	        $jsonQueryBody['two_wheels_type'] = 'scooter';
+	    } else {
+	        $jsonQueryBody['two_wheels_type'] =  'bike';
+	    }
+	    $sqlWhere[] = $key . '=:' . $key;
         } else {
             $sqlWhere[] = $key . '=:' . $key;
         }
@@ -48,22 +65,15 @@ function getBikesByParams() {
 
     $messages = [];
     foreach($bikes as $bike) {
-        // $messages[] = ["text" => $bike["name"]];
         $messages[] = [
-            "text" => $bike["name"] . ': ' . $bike["budget"] . '€ \n Cylindrée: ' . $bike["cylinder"] . '\n Marque: ' . $bike["brand"],
-            "attachment" => [
-                "type" => "image",
-                "payload" => [
-                    "url" => $bike["image_url"]
-                ]
-            ]
+            "text" => $bike["name"] . ' : ' . $bike["budget"] . '€'
         ];
     }
 
     if (count($bikes) < 1) {
-        return [
+        $messages[] = [
             "text" => "Désolé mais nous n'avons trouvé aucun véhicule correspondant à vos critères ",
-            "criteria" => $jsonQueryBody
+	    "criteria" => $jsonQueryBody
         ];
     }
 
